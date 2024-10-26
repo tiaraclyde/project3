@@ -1,12 +1,12 @@
-package main.org.cs213.clinic.cli.commands;
+package cli.commands;
 
-import main.org.cs213.clinic.core.Database;
-import main.org.cs213.clinic.core.Date;
-import main.org.cs213.clinic.core.Imaging;
-import main.org.cs213.clinic.core.Patient;
-import main.org.cs213.clinic.core.Provider;
-import main.org.cs213.clinic.core.Radiology;
-import main.org.cs213.clinic.core.Timeslot;
+import core.Database;
+import core.Date;
+import core.Imaging;
+import core.Patient;
+import core.Provider;
+import core.Radiology;
+import core.Timeslot;
 
 /**
  * The TechnicianScheduleCommand is responsible for scheduling new office

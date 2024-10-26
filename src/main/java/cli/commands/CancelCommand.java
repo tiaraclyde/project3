@@ -1,12 +1,20 @@
-package main.org.cs213.clinic.cli.commands;
+//package main.org.cs213.clinic.cli.commands;
+//
+//import main.org.cs213.clinic.core.Database;
+//import main.org.cs213.clinic.core.Date;
+//import main.org.cs213.clinic.core.Person;
+//import main.org.cs213.clinic.core.Profile;
+//import main.org.cs213.clinic.core.Timeslot;
+//import main.org.cs213.clinic.util.Format;
 
-import main.org.cs213.clinic.core.Database;
-import main.org.cs213.clinic.core.Date;
-import main.org.cs213.clinic.core.Person;
-import main.org.cs213.clinic.core.Profile;
-import main.org.cs213.clinic.core.Timeslot;
-import main.org.cs213.clinic.util.Format;
+package cli.commands;
 
+import core.Database;
+import core.Date;
+import core.Person;
+import core.Profile;
+import core.Timeslot;
+import util.Format;
 /**
  * The CancelCommand class implements the Command interface to interface with
  * CLI handled by the ClinicManager class. This class handles the cancellation

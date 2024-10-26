@@ -1,8 +1,8 @@
-package main.org.cs213.clinic.cli.commands;
+package cli.commands;
 
-import main.org.cs213.clinic.core.Appointment;
-import main.org.cs213.clinic.core.Database;
-import main.org.cs213.clinic.core.Imaging;
+import core.Appointment;
+import core.Database;
+import core.Imaging;
 
 /**
  * The PrintByOfficeAppointmentsCommand handles the printing of a list of

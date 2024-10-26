@@ -1,4 +1,4 @@
-package main.org.cs213.clinic.cli.commands;
+package cli.commands;
 
 /**
  * The Command interface defines the contract for all commands that the CLI

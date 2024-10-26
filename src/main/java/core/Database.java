@@ -1,8 +1,12 @@
 package core;
 
-import main.org.cs213.clinic.util.CustomComparator;
-import main.org.cs213.clinic.util.List;
-import main.org.cs213.clinic.util.Sort;
+//import main.org.cs213.clinic.util.CustomComparator;
+//import main.org.cs213.clinic.util.List;
+//import main.org.cs213.clinic.util.Sort;
+import util.CustomComparator;
+import util.List;
+import util.Sort;
+
 
 import static main.org.cs213.clinic.cli.commands.Command.EMPTY_OUTSTR;
 

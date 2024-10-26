@@ -1,7 +1,7 @@
-package main.org.cs213.clinic.cli.commands;
+package cli.commands;
 
-import main.org.cs213.clinic.core.Appointment;
-import main.org.cs213.clinic.core.Database;
+import core.Appointment;
+import core.Database;
 
 /**
  * The PrintByLocationCommand handles the printing of an appointments by their

@@ -1,7 +1,7 @@
-package main.org.cs213.clinic.cli.registry;
+package cli.registry;
 
-import main.org.cs213.clinic.cli.commands.Command;
-import main.org.cs213.clinic.cli.commands.InvalidCommand;
+import cli.commands.Command;
+import cli.commands.InvalidCommand;
 
 /**
  * The CommandRegistry acts as a registry for all the commands that the CLI

@@ -1,4 +1,4 @@
-package main.org.cs213.clinic.cli.commands;
+package cli.commands;
 
 /**
  * This class is useful for running a number of methods in consecutive order.

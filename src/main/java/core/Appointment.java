@@ -1,6 +1,6 @@
 package core;
 
-import main.org.cs213.clinic.util.Format;
+import util.Format;
 
 /**
  * The Appointment class is a representation of a medical appointment

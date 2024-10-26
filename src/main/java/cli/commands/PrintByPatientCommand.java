@@ -1,8 +1,8 @@
-package main.org.cs213.clinic.cli.commands;
+package cli.commands;
 
-import main.org.cs213.clinic.core.Appointment;
-import main.org.cs213.clinic.core.Database;
-import main.org.cs213.clinic.util.List;
+import core.Appointment;
+import core.Database;
+import util.List;
 
 /**
  * The PrintByPatientCommand is responsible for printing all appointments by

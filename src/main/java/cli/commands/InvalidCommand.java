@@ -1,4 +1,4 @@
-package main.org.cs213.clinic.cli.commands;
+package cli.commands;
 
 /**
  * This class represents a command that was not found in the registry. The

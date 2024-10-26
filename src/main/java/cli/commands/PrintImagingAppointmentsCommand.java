@@ -1,8 +1,8 @@
-package main.org.cs213.clinic.cli.commands;
+package cli.commands;
 
-import main.org.cs213.clinic.core.Appointment;
-import main.org.cs213.clinic.core.Database;
-import main.org.cs213.clinic.core.Imaging;
+import core.Appointment;
+import core.Database;
+import core.Imaging;
 
 /**
  * This class gathers all imaging appointments from a database and returns a

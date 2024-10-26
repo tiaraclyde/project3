@@ -1,10 +1,10 @@
-package main.org.cs213.clinic.cli.commands;
+package cli.commands;
 
-import main.org.cs213.clinic.core.Appointment;
-import main.org.cs213.clinic.core.Database;
-import main.org.cs213.clinic.core.Patient;
-import main.org.cs213.clinic.util.List;
-import main.org.cs213.clinic.util.Sort;
+import core.Appointment;
+import core.Database;
+import core.Patient;
+import util.List;
+import util.Sort;
 
 /**
  * The StatementsByPatientCommand is the representation of a command to print

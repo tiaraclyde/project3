@@ -1,6 +1,6 @@
-package main.org.cs213.clinic.cli.registry;
+package cli.registry;
 
-import main.org.cs213.clinic.cli.commands.Command;
+import cli.commands.Command;
 
 /**
  * The CommandRegistryEntry class is a simple data structure that holds a token

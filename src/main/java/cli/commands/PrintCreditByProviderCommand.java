@@ -1,11 +1,11 @@
-package main.org.cs213.clinic.cli.commands;
+package cli.commands;
 
-import main.org.cs213.clinic.core.Appointment;
-import main.org.cs213.clinic.core.Database;
-import main.org.cs213.clinic.core.Person;
-import main.org.cs213.clinic.core.Provider;
-import main.org.cs213.clinic.util.List;
-import main.org.cs213.clinic.util.Sort;
+import core.Appointment;
+import core.Database;
+import core.Person;
+import core.Provider;
+import util.List;
+import util.Sort;
 
 /**
  * This class is responsible for gathering the credit amount per provider

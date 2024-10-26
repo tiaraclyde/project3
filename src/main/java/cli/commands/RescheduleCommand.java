@@ -1,12 +1,12 @@
-package main.org.cs213.clinic.cli.commands;
+package cli.commands;
 
-import main.org.cs213.clinic.core.Appointment;
-import main.org.cs213.clinic.core.Database;
-import main.org.cs213.clinic.core.Date;
-import main.org.cs213.clinic.core.Doctor;
-import main.org.cs213.clinic.core.Person;
-import main.org.cs213.clinic.core.Profile;
-import main.org.cs213.clinic.core.Timeslot;
+import core.Appointment;
+import core.Database;
+import core.Date;
+import core.Doctor;
+import core.Person;
+import core.Profile;
+import core.Timeslot;
 
 /**
  * The RescheduleCommand class is a command to reschedule an appointment.

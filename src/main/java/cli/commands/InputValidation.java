@@ -1,19 +1,19 @@
-package main.org.cs213.clinic.cli.commands;
+package cli.commands;
 
-import main.org.cs213.clinic.core.Appointment;
-import main.org.cs213.clinic.core.Database;
-import main.org.cs213.clinic.core.Date;
-import main.org.cs213.clinic.core.Person;
-import main.org.cs213.clinic.core.Profile;
-import main.org.cs213.clinic.core.Provider;
-import main.org.cs213.clinic.core.Radiology;
-import main.org.cs213.clinic.core.Technician;
-import main.org.cs213.clinic.core.Timeslot;
-import main.org.cs213.clinic.util.Format;
-import main.org.cs213.clinic.util.List;
+import core.Appointment;
+import core.Database;
+import core.Date;
+import core.Person;
+import core.Profile;
+import core.Provider;
+import core.Radiology;
+import core.Technician;
+import core.Timeslot;
+import util.Format;
+import util.List;
 
-import static main.org.cs213.clinic.cli.commands.Command.EMPTY_OUTSTR;
-import static main.org.cs213.clinic.cli.commands.Command.MISSING_TOKENS_OUTSTR;
+import static cli.commands.Command.EMPTY_OUTSTR;
+import static cli.commands.Command.MISSING_TOKENS_OUTSTR;
 
 /**
  * The InputValidation class validates tokens for numerous inputs that come

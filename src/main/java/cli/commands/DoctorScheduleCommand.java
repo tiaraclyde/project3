@@ -1,11 +1,11 @@
-package main.org.cs213.clinic.cli.commands;
+package cli.commands;
 
-import main.org.cs213.clinic.core.Appointment;
-import main.org.cs213.clinic.core.Database;
-import main.org.cs213.clinic.core.Date;
-import main.org.cs213.clinic.core.Patient;
-import main.org.cs213.clinic.core.Provider;
-import main.org.cs213.clinic.core.Timeslot;
+import core.Appointment;
+import core.Database;
+import core.Date;
+import core.Patient;
+import core.Provider;
+import core.Timeslot;
 
 /**
  * The DoctorScheduleCommand is responsible for scheduling new office
