@@ -1,8 +1,9 @@
-module com.example.project3 {
+module org.cs213.clinic {
     requires javafx.controls;
     requires javafx.fxml;
 
+    opens org.cs213.clinic.jfx to javafx.fxml;  // Already have this
+    opens org.cs213.clinic.core to javafx.base;  // Add this line
 
-    opens com.example.project3 to javafx.fxml;
-    exports com.example.project3;
+    exports org.cs213.clinic.jfx;
 }
