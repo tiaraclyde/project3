@@ -91,6 +91,12 @@
                               <Button fx:id="myClear" mnemonicParsing="false" prefHeight="26.0" prefWidth="122.0" text="clear" />
                            </children>
                         </HBox>
+                        <MenuButton fx:id="myService" mnemonicParsing="false" text="Service" GridPane.rowIndex="3">
+                          <items>
+                            <MenuItem mnemonicParsing="false" text="Action 1" />
+                            <MenuItem mnemonicParsing="false" text="Action 2" />
+                          </items>
+                        </MenuButton>
                      </children>
                   </GridPane>
                   <TextArea layoutX="27.0" layoutY="392.0" prefHeight="259.0" prefWidth="551.0" promptText="output area" />
@@ -171,6 +177,11 @@
                     </columns>
                   </TableView>
                </children></AnchorPane>
+        </content>
+      </Tab>
+      <Tab fx:id="myPrint" text="Printing">
+        <content>
+          <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
         </content>
       </Tab>
   </tabs>
