@@ -84,6 +84,26 @@ public class ClinicManager {
     private final Database database;
 
     /**
+     * This constructor initializes te user interface user to manage their
+     * appointments without the providers file.
+     */
+    public ClinicManager(boolean dontLoad) {
+        database = new Database();
+        final int[] timeslotsBegin = {9, 14};
+        final int numOfTimeslots = 6, slotDurationMinutes = 30;
+        for (int startHour : timeslotsBegin) {
+            int minutes = 0;
+            for (int slot = 0; slot < numOfTimeslots; slot++) {
+                Timeslot timeslot = new Timeslot(startHour, minutes,
+                        0, slotDurationMinutes * slot);
+                database.addTimeslot(timeslot);
+            }
+        }
+
+        commandRegistry = getDefaultCommandRegistry(database);
+    }
+
+    /**
      * This constructor initializes a user interface for the user to manage
      * their appointments. The ClinicManager is responsible for processing the
      * inputs from the user. The constructor initializes a CommandRegistry
@@ -114,6 +134,7 @@ public class ClinicManager {
             Provider provider = ProviderFactory.createProvider(tokens, FILE_DELIM);
             database.addProvider(provider);
         }
+
         System.out.println(PROVIDERS_LOADED_HEADER);
         System.out.println(database.getProvidersAsString());
 
@@ -145,6 +166,30 @@ public class ClinicManager {
             new CommandRegistryEntry("PO", new PrintOfficeAppointmentsCommand(database))
         };
         return new CommandRegistry(registryEntries);
+    }
+
+    /**
+     * Loads provider file into the clinic manager and prints out the providers
+     * and the rotation list.
+     *
+     * @throws FileNotFoundException if the providers.txt file can't be found
+     */
+    public String loadProviders(String fileDir) throws FileNotFoundException {
+        Scanner fileStream = new Scanner(new File(fileDir));
+        while (fileStream.hasNextLine()) {
+            String tokens = fileStream.nextLine();
+            Provider provider = ProviderFactory.createProvider(tokens, FILE_DELIM);
+            database.addProvider(provider);
+        }
+
+        StringBuilder outstr = new StringBuilder();
+        outstr.append(PROVIDERS_LOADED_HEADER).append("\n");
+        outstr.append(database.getProvidersAsString()).append("\n");
+
+        outstr.append(ROTATION_LIST_HEADER).append("\n");
+        outstr.append(database.getRotationAsString()).append("\n");
+
+        return outstr.toString();
     }
 
     /**

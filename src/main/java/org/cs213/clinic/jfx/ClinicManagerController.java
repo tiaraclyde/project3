@@ -6,15 +6,19 @@ import javafx.fxml.Initializable;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.AnchorPane;
+import javafx.stage.FileChooser;
 import org.cs213.clinic.cli.registry.CommandRegistry;
 import org.cs213.clinic.core.ClinicManager;
 import org.cs213.clinic.core.Doctor;
 import org.cs213.clinic.core.Location;
 import org.cs213.clinic.core.Provider;
+import org.cs213.clinic.core.Radiology;
 import org.cs213.clinic.core.Technician;
 import org.cs213.clinic.core.Timeslot;
 import org.cs213.clinic.util.Format;
+import org.cs213.clinic.util.List;
 
+import java.io.File;
 import java.io.FileNotFoundException;
 import java.net.URL;
 import java.util.ResourceBundle;
@@ -60,11 +64,7 @@ public class ClinicManagerController implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         // TODO: Initialize your ClinicManager instance
-        try {
-            clinicManager = new ClinicManager();
-        } catch (FileNotFoundException e) {
-            throw new RuntimeException(e);
-        }
+        clinicManager = new ClinicManager(true);
         initializeComponents();
         setupEventHandlers();
         setupTableColumns();
@@ -75,15 +75,17 @@ public class ClinicManagerController implements Initializable {
         // Initialize radio button group
         ToggleGroup appointmentType = new ToggleGroup();
         officeVisitRadio.setToggleGroup(appointmentType);
+        officeVisitRadio.onActionProperty().set(e -> loadProviders());
         imagingServiceRadio.setToggleGroup(appointmentType);
+        imagingServiceRadio.onActionProperty().set(e -> loadProviders());
 
         // Initialize default values
         timeslotMenu.setText("Select Timeslot");
+        loadTimeslots();
         providerMenu.setText("Select Provider");
     }
 
     private void loadInitialData() {
-        // TODO: Load initial data from your ClinicManager
         loadProviders();
         loadTimeslots();
         loadLocations();
@@ -101,8 +103,33 @@ public class ClinicManagerController implements Initializable {
 
     private void setupEventHandlers() {
         loadProvidersButton.setOnAction(e -> {
-            loadTimeslots();
-            loadProviders();
+            // Make user select from file dialog
+            FileChooser fileChooser = new FileChooser();
+            fileChooser.setTitle("Select Providers File");
+            fileChooser.getExtensionFilters().add(
+                    new FileChooser.ExtensionFilter("Text Files", "*.txt"));
+            fileChooser.setInitialDirectory(new File(System.getProperty("user.dir")));
+            File file = fileChooser.showOpenDialog(appointmentPane.getScene().getWindow());
+            if (file != null) {
+                try {
+                    clinicManager.loadProviders(file.getAbsolutePath());
+                    loadProviders();
+                } catch (FileNotFoundException ex) {
+                    Alert alert = new Alert(Alert.AlertType.ERROR);
+                    alert.setTitle("File Not Found");
+                    alert.setHeaderText("The file could not be found.");
+                    alert.setContentText("Please try again.");
+                    alert.showAndWait();
+                }
+                loadProviders();
+                loadProvidersButton.setDisable(true);
+            } else {
+                Alert alert = new Alert(Alert.AlertType.ERROR);
+                alert.setTitle("File Not Selected");
+                alert.setHeaderText("No file was selected.");
+                alert.setContentText("Please try again.");
+                alert.showAndWait();
+            }
         });
         scheduleButton.setOnAction(e -> scheduleAppointment());
         cancelButton.setOnAction(e -> cancelAppointment());
@@ -113,41 +140,62 @@ public class ClinicManagerController implements Initializable {
     }
 
     private void loadProviders() {
-        // TODO: Load providers from your ClinicManager
         // 1. Clear existing items
         providerMenu.getItems().clear();
         // 2. Get providers from your database
-        for (Provider provider : clinicManager.getDatabase().getProviders()) {
-            if (provider instanceof Technician) continue;
-            MenuItem item = new MenuItem(provider.toString());
-            item.setOnAction(e -> {
-                providerMenu.setText(Format.capitalize(provider.getProfile().getFname()));
-                providerMenu.setId(((Doctor) provider).getNpi());
-            });
+        if (officeVisitRadio.isSelected()) {
+            providerMenu.setText("Select Provider");
+            for (Provider provider : clinicManager.getDatabase().getProviders()) {
+                if (provider instanceof Technician) continue;
+                MenuItem item = new MenuItem(provider.toString());
+                item.setOnAction(e -> {
+                    providerMenu.setText(Format.capitalize(provider.getProfile().getFname()));
+                    providerMenu.setId(((Doctor) provider).getNpi());
+                });
 
-            providerMenu.getItems().add(item);
+                providerMenu.getItems().add(item);
+            }
+        } else {
+            providerMenu.setText("Select Service");
+            for (Radiology radiology : Radiology.values()) {
+                MenuItem item = new MenuItem(Format.capitalize(radiology.name()));
+                item.setOnAction(e -> {
+                    providerMenu.setText(Format.capitalize(radiology.name()));
+                    providerMenu.setId(radiology.name().toLowerCase());
+                });
+                providerMenu.getItems().add(item);
+            }
         }
     }
 
     private void loadTimeslots() {
-        // TODO: Load timeslots from your ClinicManager
         // 1. Clear existing items from all timeslot menus
         timeslotMenu.getItems().clear();
         currentTimeslotMenu.getItems().clear();
         newTimeslotMenu.getItems().clear();
         // 2. Get timeslots from your database
+        // Wait for clinicManager to initialize
+        List<Timeslot> timeslots = clinicManager.getDatabase().getTimeslots();
         // 3. Add them to all relevant menus
-        for (Timeslot timeslot : clinicManager.getDatabase().getTimeslots()) {
+        for (Timeslot timeslot : timeslots) {
             MenuItem item = new MenuItem(Format.get12Hour(timeslot));
             item.setOnAction(e -> {
                 timeslotMenu.setText(Format.get12Hour(timeslot));
                 timeslotMenu.setId(clinicManager.getDatabase().getTimeslotId(timeslot));
-                currentTimeslotMenu.setText(Format.get12Hour(timeslot));
-                newTimeslotMenu.setText(Format.get12Hour(timeslot));
             });
             timeslotMenu.getItems().add(item);
-            currentTimeslotMenu.getItems().add(new MenuItem(Format.get12Hour(timeslot)));
-            newTimeslotMenu.getItems().add(new MenuItem(Format.get12Hour(timeslot)));
+            MenuItem currentMenuItem = new MenuItem(Format.get12Hour(timeslot));
+            currentMenuItem.setOnAction(e -> {
+                currentTimeslotMenu.setText(Format.get12Hour(timeslot));
+                currentTimeslotMenu.setId(clinicManager.getDatabase().getTimeslotId(timeslot));
+            });
+            currentTimeslotMenu.getItems().add(currentMenuItem);
+            MenuItem newMenuItem = new MenuItem(Format.get12Hour(timeslot));
+            newMenuItem.setOnAction(e -> {
+                newTimeslotMenu.setText(Format.get12Hour(timeslot));
+                newTimeslotMenu.setId(clinicManager.getDatabase().getTimeslotId(timeslot));
+            });
+            newTimeslotMenu.getItems().add(newMenuItem);
         }
     }
 
@@ -162,9 +210,10 @@ public class ClinicManagerController implements Initializable {
             showValidationError();
             return;
         }
-        outputArea.clear();
+
         CommandRegistry commandRegistry = clinicManager.getCommandRegistry();
         if (officeVisitRadio.isSelected()) {
+            loadProviders();
             // Schedule an office visit
             String[] args = {
                 Format.ukToUsDate(appointmentDate.getValue().toString(), "-", "/"),
@@ -178,12 +227,21 @@ public class ClinicManagerController implements Initializable {
             String out = commandRegistry.executeCommand(docScheduleCommand, args);
             outputArea.appendText(out);  // print to output area
             // print to output area
+        } else if (imagingServiceRadio.isSelected()) {
+            loadProviders();
+            // Schedule an imaging service
+            String[] args = {
+                Format.ukToUsDate(appointmentDate.getValue().toString(), "-", "/"),
+                timeslotMenu.getId(),
+                firstName.getText(),
+                lastName.getText(),
+                Format.ukToUsDate(dateOfBirth.getValue().toString(), "-", "/"),
+                providerMenu.getId()
+            };
+            final String techScheduleCommand = "T";
+            String out = commandRegistry.executeCommand(techScheduleCommand, args);
+            outputArea.appendText(out);
         }
-        // TODO: Use your ClinicManager to schedule the appointment
-        // 1. Get selected appointment type (office visit or imaging)
-        // 2. Create appropriate command arguments
-        // 3. Execute command via command registry
-        // 4. Handle the result
     }
 
     private void cancelAppointment() {
@@ -192,10 +250,16 @@ public class ClinicManagerController implements Initializable {
             return;
         }
 
-        // TODO: Use your ClinicManager to cancel the appointment
-        // 1. Create command arguments
-        // 2. Execute cancel command
-        // 3. Handle the result
+        String[] args = {
+            Format.ukToUsDate(appointmentDate.getValue().toString(), "-", "/"),
+            timeslotMenu.getId(),
+            firstName.getText(),
+            lastName.getText(),
+            Format.ukToUsDate(dateOfBirth.getValue().toString(), "-", "/")
+        };
+        final String cancelCommand = "C";
+        String out = clinicManager.getCommandRegistry().executeCommand(cancelCommand, args);
+        outputArea.appendText(out);
         clearForm();
     }
 
@@ -205,11 +269,27 @@ public class ClinicManagerController implements Initializable {
         // 2. Create command arguments
         // 3. Execute reschedule command
         // 4. Handle the result
+        if (!validateAppointmentInput()) {
+            showValidationError();
+            return;
+        }
+
+        String[] args = {
+            Format.ukToUsDate(appointmentDate.getValue().toString(), "-", "/"),
+            currentTimeslotMenu.getId(),
+            rescheduleFirstName.getText(),
+            rescheduleLastName.getText(),
+            Format.ukToUsDate(rescheduleDob.getValue().toString(), "-", "/"),
+            newTimeslotMenu.getId()
+        };
+
+        final String rescheduleCommand = "R";
+        String out = clinicManager.getCommandRegistry().executeCommand(rescheduleCommand, args);
+        outputArea.appendText(out);
     }
 
     private void handleNewTimeslotSelection() {
-        // TODO: Handle the selection of a new timeslot
-        // Update any relevant UI elements or state
+        newTimeslotMenu.setText(newTimeslotMenu.getText());
     }
 
     private boolean validateAppointmentInput() {
@@ -237,6 +317,7 @@ public class ClinicManagerController implements Initializable {
         timeslotMenu.getItems().clear();
         // 2. Get available timeslots for the selected date
         // 3. Update the timeslot menu
+        loadTimeslots();
     }
 
     private void showValidationError() {
