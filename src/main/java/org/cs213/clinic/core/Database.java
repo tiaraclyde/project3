@@ -93,6 +93,15 @@ public class Database {
         }
     }
 
+    public String getTimeslotId(Timeslot timeslot) {
+        for (int i = 0; i < timeslots.size(); i++) {
+            if (timeslots.get(i).equals(timeslot)) {
+                return String.valueOf(i + 1);
+            }
+        }
+        return String.valueOf(Timeslot.NONE_ID);
+    }
+
     /**
      * Checks the existence of a timeslot in the database.
      *
@@ -101,6 +110,19 @@ public class Database {
      */
     public boolean timeslotExists(int id) {
         return getTimeslot(id) != null;
+    }
+
+    /**
+     * Gets available timeslots from the database.
+     *
+     * @return list of timeslots
+     */
+    public List<Timeslot> getTimeslots() {
+        List<Timeslot> timeslots = new List<>();
+        for (Timeslot timeslot : this.timeslots) {
+            timeslots.add(timeslot);
+        }
+        return timeslots;
     }
 
     /**

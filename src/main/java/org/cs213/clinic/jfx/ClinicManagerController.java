@@ -6,8 +6,14 @@ import javafx.fxml.Initializable;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.AnchorPane;
+import org.cs213.clinic.cli.registry.CommandRegistry;
 import org.cs213.clinic.core.ClinicManager;
+import org.cs213.clinic.core.Doctor;
 import org.cs213.clinic.core.Location;
+import org.cs213.clinic.core.Provider;
+import org.cs213.clinic.core.Technician;
+import org.cs213.clinic.core.Timeslot;
+import org.cs213.clinic.util.Format;
 
 import java.io.FileNotFoundException;
 import java.net.URL;
@@ -33,6 +39,7 @@ public class ClinicManagerController implements Initializable {
     @FXML private Button scheduleButton;
     @FXML private Button cancelButton;
     @FXML private Button clearButton;
+    @FXML private TextArea outputArea;
 
     // Reschedule tab
     @FXML private MenuButton currentTimeslotMenu;
@@ -85,9 +92,7 @@ public class ClinicManagerController implements Initializable {
     private void setupTableColumns() {
         cityColumn.setCellValueFactory(cellData -> {
             Location location = cellData.getValue();
-            String name = location.name().toLowerCase();
-            final int restOfWord = 1;
-            name = name.substring(0, 1).toUpperCase() + name.substring(restOfWord);
+            String name = Format.capitalize(location.name());
             return new SimpleStringProperty(name);  // Use enum name
         });
         countyColumn.setCellValueFactory(new PropertyValueFactory<>("county"));
@@ -95,7 +100,10 @@ public class ClinicManagerController implements Initializable {
     }
 
     private void setupEventHandlers() {
-        loadProvidersButton.setOnAction(e -> loadProviders());
+        loadProvidersButton.setOnAction(e -> {
+            loadTimeslots();
+            loadProviders();
+        });
         scheduleButton.setOnAction(e -> scheduleAppointment());
         cancelButton.setOnAction(e -> cancelAppointment());
         clearButton.setOnAction(e -> clearForm());
@@ -109,7 +117,16 @@ public class ClinicManagerController implements Initializable {
         // 1. Clear existing items
         providerMenu.getItems().clear();
         // 2. Get providers from your database
-        // 3. Add them as MenuItems to providerMenu
+        for (Provider provider : clinicManager.getDatabase().getProviders()) {
+            if (provider instanceof Technician) continue;
+            MenuItem item = new MenuItem(provider.toString());
+            item.setOnAction(e -> {
+                providerMenu.setText(Format.capitalize(provider.getProfile().getFname()));
+                providerMenu.setId(((Doctor) provider).getNpi());
+            });
+
+            providerMenu.getItems().add(item);
+        }
     }
 
     private void loadTimeslots() {
@@ -120,6 +137,18 @@ public class ClinicManagerController implements Initializable {
         newTimeslotMenu.getItems().clear();
         // 2. Get timeslots from your database
         // 3. Add them to all relevant menus
+        for (Timeslot timeslot : clinicManager.getDatabase().getTimeslots()) {
+            MenuItem item = new MenuItem(Format.get12Hour(timeslot));
+            item.setOnAction(e -> {
+                timeslotMenu.setText(Format.get12Hour(timeslot));
+                timeslotMenu.setId(clinicManager.getDatabase().getTimeslotId(timeslot));
+                currentTimeslotMenu.setText(Format.get12Hour(timeslot));
+                newTimeslotMenu.setText(Format.get12Hour(timeslot));
+            });
+            timeslotMenu.getItems().add(item);
+            currentTimeslotMenu.getItems().add(new MenuItem(Format.get12Hour(timeslot)));
+            newTimeslotMenu.getItems().add(new MenuItem(Format.get12Hour(timeslot)));
+        }
     }
 
     private void loadLocations() {
@@ -129,23 +158,45 @@ public class ClinicManagerController implements Initializable {
     }
 
     private void scheduleAppointment() {
-        if (validateAppointmentInput()) {
-            // TODO: Use your ClinicManager to schedule the appointment
-            // 1. Get selected appointment type (office visit or imaging)
-            // 2. Create appropriate command arguments
-            // 3. Execute command via command registry
-            // 4. Handle the result
+        if (!validateAppointmentInput()) {
+            showValidationError();
+            return;
         }
+        outputArea.clear();
+        CommandRegistry commandRegistry = clinicManager.getCommandRegistry();
+        if (officeVisitRadio.isSelected()) {
+            // Schedule an office visit
+            String[] args = {
+                Format.ukToUsDate(appointmentDate.getValue().toString(), "-", "/"),
+                timeslotMenu.getId(),
+                firstName.getText(),
+                lastName.getText(),
+                Format.ukToUsDate(dateOfBirth.getValue().toString(), "-", "/"),
+                providerMenu.getId()
+            };
+            final String docScheduleCommand = "D";
+            String out = commandRegistry.executeCommand(docScheduleCommand, args);
+            outputArea.appendText(out);  // print to output area
+            // print to output area
+        }
+        // TODO: Use your ClinicManager to schedule the appointment
+        // 1. Get selected appointment type (office visit or imaging)
+        // 2. Create appropriate command arguments
+        // 3. Execute command via command registry
+        // 4. Handle the result
     }
 
     private void cancelAppointment() {
-        if (validateAppointmentInput()) {
-            // TODO: Use your ClinicManager to cancel the appointment
-            // 1. Create command arguments
-            // 2. Execute cancel command
-            // 3. Handle the result
-            clearForm();
+        if (!validateAppointmentInput()) {
+            showValidationError();
+            return;
         }
+
+        // TODO: Use your ClinicManager to cancel the appointment
+        // 1. Create command arguments
+        // 2. Execute cancel command
+        // 3. Handle the result
+        clearForm();
     }
 
     private void handleRescheduleRequest() {

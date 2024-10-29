@@ -15,6 +15,17 @@ public class Format {
      * the class is only used to store static methods.
      */
     public Format() {}
+
+    public static String capitalize(String str) {
+        final int rest = 1;
+        return str.substring(0, rest).toUpperCase() + str.substring(rest).toLowerCase();
+    }
+
+    public static String ukToUsDate(String date, String delimiter, String newDelimiter) {
+        String[] dateParts = date.split(delimiter);
+        return String.format("%s%s%s%s%s",
+                dateParts[1], newDelimiter, dateParts[2], newDelimiter, dateParts[0]);
+    }
     
     /**
      * This method takes a 24-hour timeslot and converts it into a 12-hour
