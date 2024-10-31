@@ -40,7 +40,7 @@
                                 <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                             </rowConstraints>
                             <children>
-                                <DatePicker fx:id="appointmentDate" GridPane.columnIndex="1" />
+                                <DatePicker fx:id="appointmentDate" editable="false" GridPane.columnIndex="1" />
                                 <Label fx:id="appointmentLabel" alignment="CENTER" text="Appointment Date" />
                                 <VBox prefHeight="200.0" prefWidth="100.0" spacing="10.0" GridPane.columnIndex="1" GridPane.rowIndex="1">
                                     <children>
@@ -126,7 +126,7 @@
                                 </VBox>
                                 <VBox prefHeight="200.0" prefWidth="100.0" GridPane.columnIndex="1">
                                     <children>
-                                        <DatePicker fx:id="rescheduleDate" prefHeight="26.0" prefWidth="170.0" />
+                                        <DatePicker fx:id="rescheduleDate" editable="false" prefHeight="26.0" prefWidth="170.0" />
                                     </children>
                                 </VBox>
                                 <VBox prefHeight="200.0" prefWidth="100.0">
@@ -138,7 +138,7 @@
                                     <children>
                                         <TextField fx:id="rescheduleFirstName" prefHeight="14.0" prefWidth="219.0" promptText="First Name" />
                                         <TextField fx:id="rescheduleLastName" prefHeight="26.0" prefWidth="221.0" promptText="Last Name" />
-                                        <DatePicker fx:id="rescheduleDob" promptText="Date of Birth" />
+                                        <DatePicker fx:id="rescheduleDob" editable="false" promptText="Date of Birth" />
                                     </children>
                                 </VBox>
                                 <Label fx:id="reschedulePatientLabel" alignment="CENTER" prefHeight="64.0" prefWidth="186.0" text="Patient" GridPane.rowIndex="1" />
