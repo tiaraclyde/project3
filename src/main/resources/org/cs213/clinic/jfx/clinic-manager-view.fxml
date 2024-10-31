@@ -145,7 +145,7 @@
                                 <VBox prefHeight="200.0" prefWidth="100.0" GridPane.columnIndex="2" GridPane.rowIndex="2">
                                     <children>
                                         <HBox prefHeight="6.0" prefWidth="183.0" />
-                                        <MenuButton fx:id="newTimeslotMenu" alignment="CENTER" mnemonicParsing="false" prefHeight="51.0" prefWidth="183.0" text="Timeslot">
+                                        <MenuButton fx:id="newTimeslotMenu" alignment="CENTER" mnemonicParsing="false" prefHeight="24.0" prefWidth="183.0" text="Timeslot">
                                             <items>
                                                 <MenuItem mnemonicParsing="false" text="Action 1" />
                                                 <MenuItem mnemonicParsing="false" text="Action 2" />
@@ -174,12 +174,12 @@
                     </children></AnchorPane>
             </content>
         </Tab>
-      <Tab fx:id="view" text="View">
+      <Tab text="View">
         <content>
           <AnchorPane fx:id="viewpage" minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
                <children>
                   <TextArea fx:id="viewout" layoutX="44.0" layoutY="234.0" prefHeight="371.0" prefWidth="512.0" promptText="view output" />
-                  <MenuButton layoutX="65.0" layoutY="70.0" mnemonicParsing="false" prefHeight="26.0" prefWidth="246.0" text="MenuButton">
+                  <MenuButton fx:id="printby" layoutX="65.0" layoutY="70.0" mnemonicParsing="false" prefHeight="26.0" prefWidth="246.0" text="Print by">
                     <items>
                       <MenuItem mnemonicParsing="false" text="Action 1" />
                       <MenuItem mnemonicParsing="false" text="Action 2" />
