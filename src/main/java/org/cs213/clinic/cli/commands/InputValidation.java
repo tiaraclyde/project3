@@ -181,6 +181,7 @@ public class InputValidation {
         Timeslot timeslot = database.getTimeslot(timeslotToken);
         Date date = new Date(dateToken);
         for (Technician technician : database.getTechnicians()) {
+            if (technician == null) { continue; }
             if (database.roomInUse(technician.getLocation(),
                     timeslot, Radiology.valueOf(service.toUpperCase()))) {
                 database.nextTechnician();

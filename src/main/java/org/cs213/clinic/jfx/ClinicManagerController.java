@@ -48,10 +48,13 @@ public class ClinicManagerController implements Initializable {
     // Reschedule tab
     @FXML private MenuButton currentTimeslotMenu;
     @FXML private Label rescheduleLabel;
+    @FXML private DatePicker rescheduleDate;
     @FXML private TextField rescheduleFirstName;
     @FXML private TextField rescheduleLastName;
     @FXML private DatePicker rescheduleDob;
     @FXML private Label reschedulePatientLabel;
+    @FXML private TextArea rescheduleOutputArea;
+    @FXML private Button rescheduleButton;
     @FXML private MenuButton newTimeslotMenu;
     @FXML private Label newTimeslotLabel;
 
@@ -60,6 +63,11 @@ public class ClinicManagerController implements Initializable {
     @FXML private TableColumn<Location, String> countyColumn;
     @FXML private TableColumn<Location, String> zipColumn;
     @FXML private TableView<Location> locationTable;
+
+    // View tab
+    @FXML private TextArea viewOutputArea;
+    @FXML private Button viewButton;
+    @FXML private MenuButton viewPrintMenu;
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
@@ -89,6 +97,7 @@ public class ClinicManagerController implements Initializable {
         loadProviders();
         loadTimeslots();
         loadLocations();
+        loadPrintOptions();
     }
 
     private void setupTableColumns() {
@@ -131,7 +140,9 @@ public class ClinicManagerController implements Initializable {
                 alert.showAndWait();
             }
         });
+        viewButton.setOnAction(e -> handlePrint());
         scheduleButton.setOnAction(e -> scheduleAppointment());
+        rescheduleButton.setOnAction(e -> handleRescheduleRequest());
         cancelButton.setOnAction(e -> cancelAppointment());
         clearButton.setOnAction(e -> clearForm());
         appointmentDate.setOnAction(e -> updateAvailableTimeslots());
@@ -166,6 +177,62 @@ public class ClinicManagerController implements Initializable {
                 providerMenu.getItems().add(item);
             }
         }
+    }
+
+    private void handlePrint() {
+        viewOutputArea.clear();
+        String printCommand = viewPrintMenu.getId();
+        if (printCommand == null) {
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("Invalid Print Selection");
+            alert.setHeaderText("Please select a print option");
+            alert.setContentText("Please select a print option from the dropdown menu.");
+            alert.showAndWait();
+            return;
+        }
+
+        String out = clinicManager.getCommandRegistry().executeCommand(printCommand, new String[0]);
+        viewOutputArea.appendText(out);
+    }
+
+    private void loadPrintOptions() {
+        viewPrintMenu.getItems().clear();
+        MenuItem appointments = new MenuItem("Appointments");
+        appointments.setOnAction(e -> {
+            viewPrintMenu.setText("Appointments");
+            viewPrintMenu.setId("PA");
+        });
+        MenuItem patients = new MenuItem("Appointments By Patient");
+        patients.setOnAction(e -> {
+            viewPrintMenu.setText("Appointments By Patient");
+            viewPrintMenu.setId("PP");
+        });
+        MenuItem locations = new MenuItem("Appointments by Location");
+        locations.setOnAction(e -> {
+            viewPrintMenu.setText("Appointments by Location");
+            viewPrintMenu.setId("PL");
+        });
+        MenuItem statements = new MenuItem("Statements");
+        statements.setOnAction(e -> {
+            viewPrintMenu.setText("Statements");
+            viewPrintMenu.setId("PS");
+        });
+        MenuItem imaging = new MenuItem("Imaging Appointments");
+        imaging.setOnAction(e -> {
+            viewPrintMenu.setText("Imaging Appointments");
+            viewPrintMenu.setId("PI");
+        });
+        MenuItem credits = new MenuItem("Credits by Provider");
+        credits.setOnAction(e -> {
+            viewPrintMenu.setText("Credits by Provider");
+            viewPrintMenu.setId("PC");
+        });
+        MenuItem office = new MenuItem("Office Appointments");
+        office.setOnAction(e -> {
+            viewPrintMenu.setText("Office Appointments");
+            viewPrintMenu.setId("PO");
+        });
+        viewPrintMenu.getItems().addAll(appointments, patients, locations, statements, imaging, credits, office);
     }
 
     private void loadTimeslots() {
@@ -207,7 +274,7 @@ public class ClinicManagerController implements Initializable {
 
     private void scheduleAppointment() {
         if (!validateAppointmentInput()) {
-            showValidationError();
+            showValidationError("schedule");
             return;
         }
 
@@ -246,7 +313,7 @@ public class ClinicManagerController implements Initializable {
 
     private void cancelAppointment() {
         if (!validateAppointmentInput()) {
-            showValidationError();
+            showValidationError("cancel");
             return;
         }
 
@@ -264,18 +331,13 @@ public class ClinicManagerController implements Initializable {
     }
 
     private void handleRescheduleRequest() {
-        // TODO: Handle appointment rescheduling
-        // 1. Validate inputs
-        // 2. Create command arguments
-        // 3. Execute reschedule command
-        // 4. Handle the result
-        if (!validateAppointmentInput()) {
-            showValidationError();
+        if (!validateRescheduleInput()) {
+            showValidationError("reschedule");
             return;
         }
 
         String[] args = {
-            Format.ukToUsDate(appointmentDate.getValue().toString(), "-", "/"),
+            Format.ukToUsDate(rescheduleDate.getValue().toString(), "-", "/"),
             currentTimeslotMenu.getId(),
             rescheduleFirstName.getText(),
             rescheduleLastName.getText(),
@@ -285,7 +347,7 @@ public class ClinicManagerController implements Initializable {
 
         final String rescheduleCommand = "R";
         String out = clinicManager.getCommandRegistry().executeCommand(rescheduleCommand, args);
-        outputArea.appendText(out);
+        rescheduleOutputArea.appendText(out);
     }
 
     private void handleNewTimeslotSelection() {
@@ -295,9 +357,24 @@ public class ClinicManagerController implements Initializable {
     private boolean validateAppointmentInput() {
         return !firstName.getText().isEmpty()
                 && !lastName.getText().isEmpty()
+                && !timeslotMenu.getText().equalsIgnoreCase("Select Timeslot")
+                && !providerMenu.getText().equalsIgnoreCase("Select Provider")
                 && dateOfBirth.getValue() != null
                 && appointmentDate.getValue() != null
                 && (officeVisitRadio.isSelected() || imagingServiceRadio.isSelected());
+    }
+
+    private boolean validateRescheduleInput() {
+        return !rescheduleFirstName.getText().isEmpty()
+                && !rescheduleLastName.getText().isEmpty()
+                && !currentTimeslotMenu.getText().equalsIgnoreCase("Timeslot")
+                && !newTimeslotMenu.getText().equalsIgnoreCase("Timeslot")
+                && rescheduleDob.getValue() != null
+                && rescheduleDate.getValue() != null
+                && currentTimeslotMenu.getId() != null
+                && rescheduleDob.getValue() != null
+                && currentTimeslotMenu.getId() != null
+                && newTimeslotMenu.getId() != null;
     }
 
     private void clearForm() {
@@ -312,19 +389,17 @@ public class ClinicManagerController implements Initializable {
     }
 
     private void updateAvailableTimeslots() {
-        // TODO: Update available timeslots based on selected date
-        // 1. Clear existing timeslots
         timeslotMenu.getItems().clear();
-        // 2. Get available timeslots for the selected date
-        // 3. Update the timeslot menu
         loadTimeslots();
     }
 
-    private void showValidationError() {
+    private void showValidationError(String action) {
         Alert alert = new Alert(Alert.AlertType.ERROR);
         alert.setTitle("Invalid Input");
         alert.setHeaderText("Please check your input");
-        alert.setContentText("All fields are required to schedule an appointment.");
+        alert.setContentText(
+                String.format("All fields are required to %s an appointment.", action)
+        );
         alert.showAndWait();
     }
 }

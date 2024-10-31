@@ -317,6 +317,7 @@ public class Database {
      * @return if the rotation alignment as successful
      */
     private boolean alignRotation() {
+        if (providers.isEmpty()) { return false; }
         final int end = rotationIndex;
         int index = rotationIndex;
         do {

@@ -154,7 +154,7 @@
                                     </children>
                                 </VBox>
                                 <Label fx:id="newTimeslotLabel" alignment="CENTER" prefHeight="25.0" prefWidth="184.0" text="Rescheduled Timeslot" GridPane.columnIndex="1" GridPane.rowIndex="2" />
-                        <Button fx:id="reschedule" mnemonicParsing="false" prefHeight="26.0" prefWidth="114.0" text="Reschedule" GridPane.rowIndex="2" />
+                        <Button fx:id="rescheduleButton" mnemonicParsing="false" prefHeight="26.0" prefWidth="114.0" text="Reschedule" GridPane.rowIndex="2" />
                             </children>
                         </GridPane>
                     </children></AnchorPane>
@@ -178,14 +178,14 @@
         <content>
           <AnchorPane fx:id="viewpage" minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
                <children>
-                  <TextArea fx:id="viewout" layoutX="44.0" layoutY="234.0" prefHeight="371.0" prefWidth="512.0" promptText="view output" />
-                  <MenuButton fx:id="printby" layoutX="65.0" layoutY="70.0" mnemonicParsing="false" prefHeight="26.0" prefWidth="246.0" text="Print by">
+                  <TextArea fx:id="viewOutputArea" layoutX="44.0" layoutY="234.0" prefHeight="371.0" prefWidth="512.0" promptText="view output" />
+                  <MenuButton fx:id="viewPrintMenu" layoutX="65.0" layoutY="70.0" mnemonicParsing="false" prefHeight="26.0" prefWidth="246.0" text="Print by">
                     <items>
                       <MenuItem mnemonicParsing="false" text="Action 1" />
                       <MenuItem mnemonicParsing="false" text="Action 2" />
                     </items>
                   </MenuButton>
-                  <Button fx:id="viewbutton" layoutX="435.0" layoutY="70.0" mnemonicParsing="false" text="View" />
+                  <Button fx:id="viewButton" layoutX="435.0" layoutY="70.0" mnemonicParsing="false" text="View" />
                </children>
             </AnchorPane>
         </content>
