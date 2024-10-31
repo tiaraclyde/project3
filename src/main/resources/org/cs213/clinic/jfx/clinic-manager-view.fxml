@@ -46,7 +46,7 @@
                                     <children>
                                         <TextField fx:id="firstName" prefHeight="14.0" prefWidth="219.0" promptText="First Name" />
                                         <TextField fx:id="lastName" prefHeight="26.0" prefWidth="221.0" promptText="Last Name" />
-                                        <DatePicker fx:id="dateOfBirth" promptText="Date of Birth" />
+                                        <DatePicker fx:id="dateOfBirth" editable="false" promptText="Date of Birth" />
                                     </children>
                                     <GridPane.margin>
                                         <Insets />
