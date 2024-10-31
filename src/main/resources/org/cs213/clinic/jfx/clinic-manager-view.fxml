@@ -59,15 +59,15 @@
                                     </children>
                                 </HBox>
                                 <Label fx:id="patientLabel" alignment="CENTER" prefHeight="113.0" prefWidth="114.0" text="Patient" GridPane.rowIndex="1" />
-                                <HBox prefHeight="100.0" prefWidth="200.0" spacing="60.0" GridPane.columnIndex="1" GridPane.rowIndex="3">
+                                <HBox prefHeight="100.0" prefWidth="200.0" spacing="40.0" GridPane.columnIndex="1" GridPane.rowIndex="3">
                                     <children>
-                                        <MenuButton fx:id="timeslotMenu" mnemonicParsing="false" prefHeight="26.0" prefWidth="102.0" text="Timeslot">
+                                        <MenuButton fx:id="timeslotMenu" mnemonicParsing="false" prefHeight="26.0" prefWidth="120.0" text="Timeslot">
                                             <items>
                                                 <MenuItem mnemonicParsing="false" text="Action 1" />
                                                 <MenuItem mnemonicParsing="false" text="Action 2" />
                                             </items>
                                         </MenuButton>
-                                        <MenuButton fx:id="providerMenu" contentDisplay="BOTTOM" mnemonicParsing="false" prefHeight="26.0" prefWidth="136.0" text="Provider">
+                                        <MenuButton fx:id="providerMenu" contentDisplay="BOTTOM" mnemonicParsing="false" prefHeight="26.0" prefWidth="123.0" text="Provider">
                                             <items>
                                                 <MenuItem mnemonicParsing="false" text="Action 1" />
                                                 <MenuItem mnemonicParsing="false" text="Action 2" />
