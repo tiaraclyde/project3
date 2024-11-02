@@ -16,11 +16,29 @@ public class Format {
      */
     public Format() {}
 
+    /**
+     * This method capitalizes the first letter of a string and lowercases
+     * the rest of the string. This is useful for formatting names.
+     *
+     * @param str the string to capitalize
+     * @return the capitalized string
+     */
     public static String capitalize(String str) {
         final int rest = 1;
         return str.substring(0, rest).toUpperCase() + str.substring(rest).toLowerCase();
     }
 
+    /**
+     * This method takes a date string in the format of "MM/DD/YYYY" and
+     * converts it to the format "DD/MM/YYYY". This is useful for converting
+     * dates from UK format to US format. The delimiter can be any character
+     * that separates the date parts.
+     *
+     * @param date the date to convert
+     * @param delimiter the delimiter separating the date parts
+     * @param newDelimiter the delimiter to replace the old delimiter
+     * @return the date in US format
+     */
     public static String ukToUsDate(String date, String delimiter, String newDelimiter) {
         String[] dateParts = date.split(delimiter);
         return String.format("%s%s%s%s%s",

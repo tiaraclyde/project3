@@ -23,52 +23,106 @@ import java.io.FileNotFoundException;
 import java.net.URL;
 import java.util.ResourceBundle;
 
+/**
+ * The ClinicManagerController class is the controller for the ClinicManager
+ * application. It is responsible for handling the user interface events and
+ * updating the user interface based on the user's input.
+ */
 public class ClinicManagerController implements Initializable {
     // Reference to your core clinic manager
+    /** The ClinicManager instance that manages the clinic. */
     private ClinicManager clinicManager;
 
     // Existing FXML injected fields remain the same...
+    /** The anchor pane for the appointment tab. */
     @FXML private AnchorPane appointmentPane;
+    /** The date picker for the appointment date. */
     @FXML private DatePicker appointmentDate;
+    /** The label for the appointment tab. */
     @FXML private Label appointmentLabel;
+    /** The text field for the patient's first name. */
     @FXML private TextField firstName;
+    /** The text field for the patient's last name. */
     @FXML private TextField lastName;
+    /** The date picker for the patient's date of birth. */
     @FXML private DatePicker dateOfBirth;
+    /** The radio button for an office visit. */
     @FXML private RadioButton officeVisitRadio;
+    /** The radio button for an imaging service. */
     @FXML private RadioButton imagingServiceRadio;
+    /** The label for the patient's name. */
     @FXML private Label patientLabel;
+    /** The menu button for the timeslot. */
     @FXML private MenuButton timeslotMenu;
+    /** The menu button for the provider. */
     @FXML private MenuButton providerMenu;
+    /** The button to load providers. */
     @FXML private Button loadProvidersButton;
+    /** The button to schedule an appointment. */
     @FXML private Button scheduleButton;
+    /** The button to cancel an appointment. */
     @FXML private Button cancelButton;
+    /** The button to clear the form. */
     @FXML private Button clearButton;
+    /** The text area for the output. */
     @FXML private TextArea outputArea;
 
     // Reschedule tab
+    /** The menu button for the current timeslot. */
     @FXML private MenuButton currentTimeslotMenu;
+    /** The label for the reschedule tab. */
     @FXML private Label rescheduleLabel;
+    /** The date picker for the reschedule date. */
     @FXML private DatePicker rescheduleDate;
+    /** The text field for the patient's first name. */
     @FXML private TextField rescheduleFirstName;
+    /** The text field for the patient's last name. */
     @FXML private TextField rescheduleLastName;
+    /** The date picker for the patient's date of birth. */
     @FXML private DatePicker rescheduleDob;
+    /** The label for the reschedule patient. */
     @FXML private Label reschedulePatientLabel;
+    /** The text area for the reschedule output. */
     @FXML private TextArea rescheduleOutputArea;
+    /** The button to reschedule an appointment. */
     @FXML private Button rescheduleButton;
+    /** The menu button for the new timeslot. */
     @FXML private MenuButton newTimeslotMenu;
+    /** The label for the new timeslot. */
     @FXML private Label newTimeslotLabel;
 
     // Clinic Locations tab
+    /** The table column for the city. */
     @FXML private TableColumn<Location, String> cityColumn;
+    /** The table column for the county. */
     @FXML private TableColumn<Location, String> countyColumn;
+    /** The table column for the zip code. */
     @FXML private TableColumn<Location, String> zipColumn;
+    /** The table view for the locations. */
     @FXML private TableView<Location> locationTable;
 
     // View tab
+    /** The text area for the view output. */
     @FXML private TextArea viewOutputArea;
+    /** The button to view the output. */
     @FXML private Button viewButton;
+    /** The menu button for the view print options. */
     @FXML private MenuButton viewPrintMenu;
 
+    /**
+     * Constructs a ClinicManagerController with the specified ClinicManager.
+     * This constructor is used for testing purposes.
+     */
+    public ClinicManagerController() {
+        // Default constructor
+    }
+
+    /**
+     * Initializes the controller class for the gui application.
+     *
+     * @param url the URL to the FXML file
+     * @param rb the resource bundle
+     */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         // TODO: Initialize your ClinicManager instance
@@ -79,6 +133,10 @@ public class ClinicManagerController implements Initializable {
         loadInitialData();
     }
 
+    /**
+     * Initializes the components for the gui application and references
+     * the clinic manager command options.
+     */
     private void initializeComponents() {
         // Initialize radio button group
         ToggleGroup appointmentType = new ToggleGroup();
@@ -93,6 +151,10 @@ public class ClinicManagerController implements Initializable {
         providerMenu.setText("Select Provider");
     }
 
+    /**
+     * Loads the initial data for the clinic manager application.
+     * This includes loading the providers, timeslots, locations, and print options.
+     */
     private void loadInitialData() {
         loadProviders();
         loadTimeslots();
@@ -100,6 +162,9 @@ public class ClinicManagerController implements Initializable {
         loadPrintOptions();
     }
 
+    /**
+     * Sets up the table columns for the locations table.
+     */
     private void setupTableColumns() {
         cityColumn.setCellValueFactory(cellData -> {
             Location location = cellData.getValue();
@@ -110,6 +175,12 @@ public class ClinicManagerController implements Initializable {
         zipColumn.setCellValueFactory(new PropertyValueFactory<>("zip"));
     }
 
+    /**
+     * Sets up the event handlers for the gui application. This includes
+     * handling the load providers button, view button, schedule button,
+     * reschedule button, cancel button, clear button, appointment date,
+     * current timeslot menu, and new timeslot menu.
+     */
     private void setupEventHandlers() {
         loadProvidersButton.setOnAction(e -> {
             // Make user select from file dialog
@@ -150,6 +221,11 @@ public class ClinicManagerController implements Initializable {
         newTimeslotMenu.setOnAction(e -> handleNewTimeslotSelection());
     }
 
+    /**
+     * Loads the providers for the clinic manager application into the
+     * provider menu. This includes loading the providers for an office visit
+     * or an imaging service.
+     */
     private void loadProviders() {
         // 1. Clear existing items
         providerMenu.getItems().clear();
@@ -179,6 +255,12 @@ public class ClinicManagerController implements Initializable {
         }
     }
 
+    /**
+     * Handles the print command for the clinic manager application. This
+     * includes printing the appointments, appointments by patient, appointments
+     * by location, statements, imaging appointments, credits by provider, and
+     * office appointments.
+     */
     private void handlePrint() {
         viewOutputArea.clear();
         String printCommand = viewPrintMenu.getId();
@@ -192,9 +274,13 @@ public class ClinicManagerController implements Initializable {
         }
 
         String out = clinicManager.getCommandRegistry().executeCommand(printCommand, new String[0]);
-        viewOutputArea.appendText(out);
+        viewOutputArea.setText(out);
     }
 
+    /**
+     * Loads the print options for the clinic manager application into the
+     * view print menu.
+     */
     private void loadPrintOptions() {
         viewPrintMenu.getItems().clear();
         MenuItem appointments = new MenuItem("Appointments");
@@ -235,6 +321,11 @@ public class ClinicManagerController implements Initializable {
         viewPrintMenu.getItems().addAll(appointments, patients, locations, statements, imaging, credits, office);
     }
 
+    /**
+     * Loads the timeslots for the clinic manager application into the
+     * timeslot menu. This includes loading the timeslots for the current
+     * timeslot and the new timeslot.
+     */
     private void loadTimeslots() {
         // 1. Clear existing items from all timeslot menus
         timeslotMenu.getItems().clear();
@@ -266,12 +357,20 @@ public class ClinicManagerController implements Initializable {
         }
     }
 
+    /**
+     * Loads the locations for the clinic manager application into the
+     * location table.
+     */
     private void loadLocations() {
         for (Location location : Location.values()) {
             locationTable.getItems().add(location);
         }
     }
 
+    /**
+     * Schedules an appointment for the clinic manager application. This
+     * includes scheduling an office visit or an imaging service.
+     */
     private void scheduleAppointment() {
         if (!validateAppointmentInput()) {
             showValidationError("schedule");
@@ -311,6 +410,12 @@ public class ClinicManagerController implements Initializable {
         }
     }
 
+    /**
+     * Cancels an appointment for the clinic manager application.
+     * This includes cancelling an office visit or an imaging service.
+     * The appointment is cancelled based on the patient's first name,
+     * last name, date of birth, appointment date, and timeslot.
+     */
     private void cancelAppointment() {
         if (!validateAppointmentInput()) {
             showValidationError("cancel");
@@ -330,6 +435,12 @@ public class ClinicManagerController implements Initializable {
         clearForm();
     }
 
+    /**
+     * Handles the reschedule request for the clinic manager application.
+     * This includes rescheduling an appointment based on the current
+     * timeslot, new timeslot, patient's first name, last name, date of birth,
+     * and reschedule date.
+     */
     private void handleRescheduleRequest() {
         if (!validateRescheduleInput()) {
             showValidationError("reschedule");
@@ -350,10 +461,21 @@ public class ClinicManagerController implements Initializable {
         rescheduleOutputArea.appendText(out);
     }
 
+    /**
+     * Handles the new timeslot selection for the clinic manager application.
+     * This includes updating the new timeslot menu text.
+     */
     private void handleNewTimeslotSelection() {
         newTimeslotMenu.setText(newTimeslotMenu.getText());
     }
 
+    /**
+     * Validates the appointment input for the clinic manager application.
+     * This includes validating the patient's first name, last name, date of birth,
+     * appointment date, timeslot, and provider.
+     *
+     * @return if gui input is valid
+     */
     private boolean validateAppointmentInput() {
         return !firstName.getText().isEmpty()
                 && !lastName.getText().isEmpty()
@@ -364,6 +486,13 @@ public class ClinicManagerController implements Initializable {
                 && (officeVisitRadio.isSelected() || imagingServiceRadio.isSelected());
     }
 
+    /**
+     * Validates the reschedule input for the clinic manager application.
+     * This includes validating the patient's first name, last name, date of birth,
+     * reschedule date, current timeslot, and new timeslot.
+     *
+     * @return if gui input for reschedule is valid
+     */
     private boolean validateRescheduleInput() {
         return !rescheduleFirstName.getText().isEmpty()
                 && !rescheduleLastName.getText().isEmpty()
@@ -377,6 +506,9 @@ public class ClinicManagerController implements Initializable {
                 && newTimeslotMenu.getId() != null;
     }
 
+    /**
+     * Clears the form for the clinic manager application.
+     */
     private void clearForm() {
         firstName.clear();
         lastName.clear();
@@ -388,11 +520,19 @@ public class ClinicManagerController implements Initializable {
         providerMenu.setText("Select Provider");
     }
 
+    /**
+     * Updates the available timeslots for the clinic manager application.
+     */
     private void updateAvailableTimeslots() {
         timeslotMenu.getItems().clear();
         loadTimeslots();
     }
 
+    /**
+     * Shows a validation error for the clinic manager application.
+     *
+     * @param action the action to show validation error for
+     */
     private void showValidationError(String action) {
         Alert alert = new Alert(Alert.AlertType.ERROR);
         alert.setTitle("Invalid Input");

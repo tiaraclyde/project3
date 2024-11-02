@@ -86,6 +86,8 @@ public class ClinicManager {
     /**
      * This constructor initializes te user interface user to manage their
      * appointments without the providers file.
+     *
+     * @param dontLoad boolean to indicate not to load providers
      */
     public ClinicManager(boolean dontLoad) {
         database = new Database();
@@ -172,6 +174,8 @@ public class ClinicManager {
      * Loads provider file into the clinic manager and prints out the providers
      * and the rotation list.
      *
+     * @param fileDir directory of the providers.txt file
+     * @return string representation of the providers and rotation list
      * @throws FileNotFoundException if the providers.txt file can't be found
      */
     public String loadProviders(String fileDir) throws FileNotFoundException {

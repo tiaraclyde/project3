@@ -1,3 +1,6 @@
+/**
+ * This module-info.java file is used to define the module for the JavaFX application.
+ */
 module org.cs213.clinic {
     requires javafx.controls;
     requires javafx.fxml;

@@ -93,6 +93,12 @@ public class Database {
         }
     }
 
+    /**
+     * Gets the timeslot id from the database.
+     *
+     * @param timeslot the timeslot to get the id for
+     * @return the timeslot id
+     */
     public String getTimeslotId(Timeslot timeslot) {
         for (int i = 0; i < timeslots.size(); i++) {
             if (timeslots.get(i).equals(timeslot)) {
