@@ -264,7 +264,8 @@ public class ClinicManagerController implements Initializable {
     private void handlePrint() {
         viewOutputArea.clear();
         String printCommand = viewPrintMenu.getId();
-        if (printCommand == null) {
+        String text = viewPrintMenu.getText();
+        if (printCommand == null || text.equalsIgnoreCase("Print by")) {
             Alert alert = new Alert(Alert.AlertType.ERROR);
             alert.setTitle("Invalid Print Selection");
             alert.setHeaderText("Please select a print option");
