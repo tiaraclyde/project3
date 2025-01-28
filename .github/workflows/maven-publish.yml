@@ -12,8 +12,9 @@ jobs:
 
     runs-on: ubuntu-latest
     permissions:
-      contents: read
-      packages: write
+      contents: write       # Needed to interact with GitHub releases (to upload the JAR)
+      packages: write       # Optional, if you also need to interact with packages
+      id-token: write       # Necessary for interacting with GitHub API in private repos
 
     steps:
     - uses: actions/checkout@v4
