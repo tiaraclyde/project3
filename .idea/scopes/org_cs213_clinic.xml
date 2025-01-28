@@ -1,0 +1,3 @@
+<component name="DependencyValidationManager">
+  <scope name="org.cs213.clinic" pattern="src:org.cs213.clinic.jfx.ClinicManagerController||src:org.cs213.clinic.jfx.ClinicManagerMain||src:org.cs213.clinic.util.*||src:org.cs213.clinic.jfx.*||src:org.cs213.clinic.core.*||src:org.cs213.clinic.cli.registry.*||src:org.cs213.clinic.cli.commands.*||src:*" />
+</component>
