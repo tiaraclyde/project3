@@ -94,4 +94,12 @@
             </plugin>
         </plugins>
     </build>
+
+    <distributionManagement>
+        <repository>
+            <id>github</id>
+            <url>https://maven.pkg.github.com/tiaraclyde/project3</url>
+        </repository>
+    </distributionManagement>
+
 </project>
