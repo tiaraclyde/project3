@@ -8,10 +8,13 @@ import javafx.stage.Stage;
 
 import java.io.IOException;
 
-public class ClinicManagerMain extends Application {
+/**
+ * Handle the JavaFX application lifecycle.
+ */
+public class ClinicManagerApp extends Application {
     @Override
     public void start(Stage primaryStage) throws IOException {
-        FXMLLoader fxmlLoader = new FXMLLoader(ClinicManagerMain.class.getResource("clinic-manager-view.fxml"));
+        FXMLLoader fxmlLoader = new FXMLLoader(ClinicManagerApp.class.getResource("clinic-manager-view.fxml"));
         Parent root = fxmlLoader.load();
 
         Scene scene = new Scene(root);

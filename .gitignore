@@ -1,10 +1,8 @@
 target/
+dependency-reduced-pom.xml
 !.mvn/wrapper/maven-wrapper.jar
 !**/src/main/**/target/
 !**/src/test/**/target/
-
-### VSCode ###
-.vscode/
 
 ### IntelliJ IDEA ###
 .idea/modules.xml
