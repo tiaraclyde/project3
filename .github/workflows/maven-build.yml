@@ -8,8 +8,7 @@ on:
     types: [created]
 
 jobs:
-  build:
-
+  build-ubuntu:
     runs-on: ubuntu-latest
     permissions:
       contents: write       # Needed to interact with GitHub releases (to upload the JAR)
@@ -18,7 +17,7 @@ jobs:
 
     steps:
     - uses: actions/checkout@v4
-    
+
     - name: Set up JDK 17 (Ubuntu)
       uses: actions/setup-java@v4
       with:
@@ -26,20 +25,26 @@ jobs:
         distribution: 'temurin'
 
     - name: Build with Maven (Ubuntu)
-      run: mvn -B package --file pom.xml
+      run: mvn clean package -DskipTests
 
     - name: Delete JAR file containing "original" (Ubuntu)
       run: |
         find target -name "*original*.jar" -exec rm -f {} \;
 
+    - name: Rename JAR file (Ubuntu)
+      run: |
+        for file in target/*.jar; do
+          mv "$file" "${file%.jar}-ubuntu.jar"
+        done
+
     - name: Upload JAR to GitHub Release (Ubuntu)
       uses: softprops/action-gh-release@v1
       with:
         files: target/*.jar
-        tag_name: ${{ github.job }}  # Use the tag name that triggered the release
+        tag_name: ${{ github.ref_name }}
       env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}\
-  
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
   build-windows:
     runs-on: windows-latest
     permissions:
@@ -57,17 +62,22 @@ jobs:
         distribution: 'temurin'
 
     - name: Build with Maven (Windows)
-      run: mvn -B package --file pom.xml
+      run: mvn clean package -DskipTests
 
     - name: Delete JAR file containing "original" (Windows)
       run: |
         Remove-Item -Path target\*original*.jar -Force
-      shell: pwsh  # Use PowerShell shell to delete file on Windows
+      shell: pwsh
+
+    - name: Rename JAR file (Windows)
+      run: |
+        Get-ChildItem target\*.jar | Rename-Item -NewName { $_.BaseName + "-windows.jar" }
+      shell: pwsh
 
     - name: Upload JAR to GitHub Release (Windows)
       uses: softprops/action-gh-release@v1
       with:
         files: target/*.jar
-        tag_name: ${{ github.job }}  # Use the tag name that triggered the release
+        tag_name: ${{ github.ref_name }}
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
