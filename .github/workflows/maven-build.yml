@@ -18,22 +18,21 @@ jobs:
 
     steps:
     - uses: actions/checkout@v4
-    - name: Set up JDK 17
+    
+    - name: Set up JDK 17 (Ubuntu)
       uses: actions/setup-java@v4
       with:
         java-version: '17'
         distribution: 'temurin'
-        server-id: github # Value of the distributionManagement/repository/id field of the pom.xml
-        settings-path: ${{ github.workspace }} # location for the settings.xml file
 
-    - name: Build with Maven
+    - name: Build with Maven (Ubuntu)
       run: mvn -B package --file pom.xml
 
-    - name: Delete JAR file containing "original"
+    - name: Delete JAR file containing "original" (Ubuntu)
       run: |
         find target -name "*original*.jar" -exec rm -f {} \;
 
-    - name: Upload JAR to GitHub Release
+    - name: Upload JAR to GitHub Release (Ubuntu)
       uses: softprops/action-gh-release@v1
       with:
         files: target/*.jar
@@ -58,11 +57,11 @@ jobs:
         distribution: 'temurin'
 
     - name: Build with Maven (Windows)
-      run: mvn clean package -DskipTests
+      run: mvn -B package --file pom.xml
 
     - name: Delete JAR file containing "original" (Windows)
       run: |
-        del /f /q target\*original*.jar
+        Remove-Item -Path target\*original*.jar -Force
       shell: pwsh  # Use PowerShell shell to delete file on Windows
 
     - name: Upload JAR to GitHub Release (Windows)
