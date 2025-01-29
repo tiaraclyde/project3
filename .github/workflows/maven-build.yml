@@ -81,3 +81,36 @@ jobs:
         tag_name: ${{ github.ref_name }}
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+  build-macos:
+    runs-on: macos-latest
+    permissions:
+      contents: write
+      packages: write
+      id-token: write
+
+    steps:
+    - uses: actions/checkout@v4
+
+    - name: Set up JDK 17 (macOS)
+      uses: actions/setup-java@v4
+      with:
+        java-version: '17'
+        distribution: 'temurin'
+
+    - name: Build with Maven (macOS)
+      run: mvn clean package -DskipTests
+
+    - name: Delete JAR file containing "original" (macOS)
+      run: find target -name "*original*.jar" -exec rm -f {} \;
+
+    - name: Rename JAR file (macOS)
+      run: for file in target/*.jar; do mv "$file" "${file%.jar}-macos.jar"; done
+
+    - name: Upload JAR to GitHub Release (macOS)
+      uses: softprops/action-gh-release@v1
+      with:
+        files: target/*.jar
+        tag_name: ${{ github.ref_name }}
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
